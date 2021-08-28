@@ -1,0 +1,6 @@
+POST http://localhost:8090/user/getUser
+Content-Type: application/json
+
+{
+  "userId": 1
+}
