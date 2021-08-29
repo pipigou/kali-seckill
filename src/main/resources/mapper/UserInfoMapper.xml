@@ -8,14 +8,17 @@
         <result column="user_name" property="userName" />
         <result column="gender" property="gender" />
         <result column="age" property="age" />
-        <result column="telphone" property="telphone" />
+        <result column="telphone" property="telephone" />
         <result column="register_mode" property="registerMode" />
         <result column="third_party_id" property="thirdPartyId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_name, gender, age, telphone, register_mode, third_party_id
+        id, user_name, gender, age, telephone, register_mode, third_party_id
     </sql>
+    <select id="selectUserInfoCountByUserNameAndTelephone" resultType="java.lang.Integer">
+       SELECT 1 FROM ums_user_info WHERE user_name=#{userName} OR telephone=#{telephone} LIMIT 1
+    </select>
 
 </mapper>

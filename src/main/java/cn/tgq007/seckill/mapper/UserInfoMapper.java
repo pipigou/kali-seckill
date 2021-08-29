@@ -3,6 +3,7 @@ package cn.tgq007.seckill.mapper;
 import cn.tgq007.seckill.entity.UserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -15,4 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserInfoMapper extends BaseMapper<UserInfo> {
 
+    Integer selectUserInfoCountByUserNameAndTelephone(@Param("userName") String userName, @Param("telephone") String telephone);
 }

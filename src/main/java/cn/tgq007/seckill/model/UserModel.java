@@ -1,19 +1,26 @@
 package cn.tgq007.seckill.model;
 
+import cn.tgq007.seckill.utils.IsMobile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jdk.nashorn.internal.ir.annotations.Ignore;
+
+import javax.validation.constraints.NotEmpty;
 
 public class UserModel {
 
     private Integer id;
+    @NotEmpty(message = "用户名不能为空")
     private String userName;
     private Integer gender;
     private Integer age;
-    private String telphone;
+    @IsMobile(message = "手机号不正确")
+    private String telephone;
     private String registerMode;
     private String thirdPartyId;
+    @NotEmpty(message = "密码不能为空")
     private String encrptPassword;
+    @NotEmpty(message = "验证码不能为空")
+    private String otpCode;
 
     public Integer getId() {
         return id;
@@ -48,11 +55,11 @@ public class UserModel {
     }
 
     public String getTelphone() {
-        return telphone;
+        return telephone;
     }
 
     public void setTelphone(String telphone) {
-        this.telphone = telphone;
+        this.telephone = telphone;
     }
 
     @JsonIgnore
@@ -83,5 +90,21 @@ public class UserModel {
     @JsonProperty
     public void setEncrptPassword(String encrptPassword) {
         this.encrptPassword = encrptPassword;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getOtpCode() {
+        return otpCode;
+    }
+
+    public void setOtpCode(String otpCode) {
+        this.otpCode = otpCode;
     }
 }

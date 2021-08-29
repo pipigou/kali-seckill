@@ -2,6 +2,8 @@ package cn.tgq007.seckill.entity;
 
 public enum ServiceCode implements ResultCode {
     SUCCESS(200, "成功"),
+    VERIFICATION_CODE_ERROR(3, "验证码错误"),
+    HAS_BEEN_REGISTER(4, "用户名或密码已经被注册了"),
     FAIL(-1, "失败"),
     BAD_REQUEST(400, "bad request"),
     PARAM_ERROR(300, "参数异常"),

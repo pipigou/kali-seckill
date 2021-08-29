@@ -4,3 +4,14 @@ Content-Type: application/json
 {
   "userId": 1
 }
+
+###
+POST http://localhost:8090/user/registerUser
+Content-Type: application/json
+
+{
+  "userName": "xiaohong",
+  "telephone": "17612171182",
+  "encrptPassword": "123456",
+  "otpCode": "123456"
+}

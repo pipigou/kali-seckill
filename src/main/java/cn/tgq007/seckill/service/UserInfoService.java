@@ -17,4 +17,6 @@ import java.util.concurrent.ExecutionException;
 public interface UserInfoService extends IService<UserInfo> {
 
     UserModel getUserInfoByUserId(Integer userId)  throws ExecutionException, InterruptedException;
+
+    boolean registerUser(UserModel userModel, String code);
 }

@@ -28,6 +28,8 @@ public class UserPassword implements Serializable {
 
     private Integer userId;
 
+    private String salt;
+
     public Integer getId() {
         return id;
     }
@@ -50,12 +52,21 @@ public class UserPassword implements Serializable {
         this.userId = userId;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     @Override
     public String toString() {
         return "UserPassword{" +
-            "id=" + id +
-            ", encrptPassword=" + encrptPassword +
-            ", userId=" + userId +
-        "}";
+                "id=" + id +
+                ", encrptPassword='" + encrptPassword + '\'' +
+                ", userId=" + userId +
+                ", salt='" + salt + '\'' +
+                '}';
     }
 }

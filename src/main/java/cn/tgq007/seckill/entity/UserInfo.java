@@ -39,7 +39,7 @@ public class UserInfo implements Serializable {
     /**
      * 电话号码
      */
-    private String telphone;
+    private String telephone;
 
     /**
      * 注册方式
@@ -79,13 +79,15 @@ public class UserInfo implements Serializable {
     public void setAge(Integer age) {
         this.age = age;
     }
-    public String getTelphone() {
-        return telphone;
+
+    public String getTelephone() {
+        return telephone;
     }
 
-    public void setTelphone(String telphone) {
-        this.telphone = telphone;
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
+
     public String getRegisterMode() {
         return registerMode;
     }
@@ -104,13 +106,13 @@ public class UserInfo implements Serializable {
     @Override
     public String toString() {
         return "UserInfo{" +
-            "id=" + id +
-            ", userName=" + userName +
-            ", gender=" + gender +
-            ", age=" + age +
-            ", telphone=" + telphone +
-            ", registerMode=" + registerMode +
-            ", thirdPartyId=" + thirdPartyId +
-        "}";
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", gender=" + gender +
+                ", age=" + age +
+                ", telephone='" + telephone + '\'' +
+                ", registerMode='" + registerMode + '\'' +
+                ", thirdPartyId='" + thirdPartyId + '\'' +
+                '}';
     }
 }
