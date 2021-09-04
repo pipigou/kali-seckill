@@ -4,7 +4,6 @@ import cn.tgq007.seckill.dto.TelephoneDTO;
 import cn.tgq007.seckill.entity.ResponseData;
 import cn.tgq007.seckill.model.UserModel;
 import cn.tgq007.seckill.service.UserInfoService;
-import cn.tgq007.seckill.utils.OTPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +31,8 @@ public class UserInfoController {
 
     @PostMapping("/getOTP")
     public ResponseData<Boolean> getUserOTP(@Valid @RequestBody TelephoneDTO telephoneDTO) {
-        String otp = OTPUtil.generateOTP(100000, 1000000);
-        // 暂时存储于session
-        httpServletRequest.setAttribute(telephoneDTO.getTelephone(), otp);
-        System.out.println("telephone = " + telephoneDTO.getTelephone() + ", code = " + otp);
-        return ResponseData.success(true);
+        boolean res = userInfoService.getUserOTP(telephoneDTO.getTelephone());
+        return ResponseData.success(res);
     }
 
     @GetMapping("/getUser/{userId}")
@@ -46,9 +42,8 @@ public class UserInfoController {
     }
 
     @PostMapping("/registerUser")
-    public  ResponseData<Boolean> registerUser(@Valid @RequestBody UserModel userModel) {
-        String code = (String) httpServletRequest.getSession().getAttribute(userModel.getTelphone());
-        boolean status = userInfoService.registerUser(userModel, code);
+    public ResponseData<Boolean> registerUser(@Valid @RequestBody UserModel userModel) {
+        boolean status = userInfoService.registerUser(userModel);
         return ResponseData.success(status);
     }
 }

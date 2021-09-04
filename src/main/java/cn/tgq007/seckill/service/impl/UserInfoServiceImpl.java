@@ -6,9 +6,11 @@ import cn.tgq007.seckill.entity.UserPassword;
 import cn.tgq007.seckill.exception.ExceptionCast;
 import cn.tgq007.seckill.mapper.UserInfoMapper;
 import cn.tgq007.seckill.model.UserModel;
+import cn.tgq007.seckill.service.RedisService;
 import cn.tgq007.seckill.service.UserInfoService;
 import cn.tgq007.seckill.service.UserPasswordService;
 import cn.tgq007.seckill.utils.MD5Util;
+import cn.tgq007.seckill.utils.OTPUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -35,11 +38,24 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private UserInfoMapper userInfoMapper;
     @Autowired
     private UserPasswordService userPasswordService;
-
+    @Autowired
+    private RedisService redisService;
     @Value("${salt.length}")
     private Integer saltLength;
+    @Value("${user.service.prefix}")
+    private String userPrefix;
 
     private static final int DEFAULT_SALT_LENGTH = 6;
+
+    @Override
+    public boolean getUserOTP(String telephone) {
+        String otp = OTPUtil.generateOTP(100000, 1000000);
+        String key = userPrefix + telephone;
+        redisService.set(key, otp);
+        redisService.expire(key, 60, TimeUnit.SECONDS);
+        System.out.println("telephone = " + telephone + ", code = " + otp);
+        return true;
+    }
 
     public UserModel getUserInfoByUserId(Integer userId) throws ExecutionException, InterruptedException {
         CompletableFuture<Object> future = CompletableFuture.supplyAsync(() -> {
@@ -63,8 +79,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Transactional
     @Override
-    public boolean registerUser(UserModel userModel, String code) {
-        if (!StringUtils.equals(userModel.getOtpCode(), code))
+    public boolean registerUser(UserModel userModel) {
+        String key = userPrefix + userModel.getTelephone();
+        if (!isValidCode(key, userModel.getOtpCode()))
             ExceptionCast.cast(ServiceCode.VERIFICATION_CODE_ERROR);
         if (isUserNameOrTelephoneHasBeenRegister(userModel.getUserName(), userModel.getTelephone()))
             ExceptionCast.cast(ServiceCode.HAS_BEEN_REGISTER);
@@ -86,4 +103,8 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
         return status != null;
     }
 
+    private boolean isValidCode(String key, String code) {
+        String catchCode = (String) redisService.get(key);
+        return catchCode != null && StringUtils.equals(catchCode, code);
+    }
 }

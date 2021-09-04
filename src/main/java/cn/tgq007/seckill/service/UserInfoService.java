@@ -16,7 +16,9 @@ import java.util.concurrent.ExecutionException;
  */
 public interface UserInfoService extends IService<UserInfo> {
 
+    boolean getUserOTP(String telephone);
+
     UserModel getUserInfoByUserId(Integer userId)  throws ExecutionException, InterruptedException;
 
-    boolean registerUser(UserModel userModel, String code);
+    boolean registerUser(UserModel userModel);
 }
