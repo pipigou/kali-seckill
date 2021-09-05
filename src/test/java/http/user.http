@@ -15,3 +15,12 @@ Content-Type: application/json
   "encrptPassword": "123456",
   "otpCode": "123456"
 }
+
+###
+POST http://localhost:8090/user/login
+Content-Type: application/json
+
+{
+  "telephone": "17612171189",
+  "password": "123456"
+}

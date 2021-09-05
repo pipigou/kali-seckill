@@ -5,12 +5,14 @@ import cn.tgq007.seckill.entity.UserInfo;
 import cn.tgq007.seckill.entity.UserPassword;
 import cn.tgq007.seckill.exception.ExceptionCast;
 import cn.tgq007.seckill.mapper.UserInfoMapper;
+import cn.tgq007.seckill.model.LoginInfo;
 import cn.tgq007.seckill.model.UserModel;
 import cn.tgq007.seckill.service.RedisService;
 import cn.tgq007.seckill.service.UserInfoService;
 import cn.tgq007.seckill.service.UserPasswordService;
 import cn.tgq007.seckill.utils.MD5Util;
 import cn.tgq007.seckill.utils.OTPUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -106,5 +108,25 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     private boolean isValidCode(String key, String code) {
         String catchCode = (String) redisService.get(key);
         return catchCode != null && StringUtils.equals(catchCode, code);
+    }
+
+    public Boolean login(String telephone, String password) {
+        QueryWrapper<UserInfo> userInfoQueryWrapper = new QueryWrapper<>();
+        userInfoQueryWrapper.eq("telephone", telephone);
+        UserInfo userInfo = userInfoMapper.selectOne(userInfoQueryWrapper);
+        if (userInfo == null)
+            ExceptionCast.cast(ServiceCode.USER_NOT_EXIST);
+        Integer userId = userInfo.getId();
+        UserPassword userPassword = userPasswordService.getUserPasswordByUserId(userId);
+        UserModel userModel = new UserModel();
+        BeanUtils.copyProperties(userPassword, userModel);
+        BeanUtils.copyProperties(userInfo, userModel);
+        // 密码校验
+        String pass = MD5Util.encoderPassword(password, userPassword.getSalt());
+        if (!userModel.getEncrptPassword().equals(pass))
+            ExceptionCast.cast(ServiceCode.USER_LOGIN_FAILED);
+        LoginInfo loginInfo = new LoginInfo(true, userModel);
+        redisService.set(userPrefix + "login." + telephone, loginInfo);
+        return true;
     }
 }

@@ -21,4 +21,6 @@ public interface UserInfoService extends IService<UserInfo> {
     UserModel getUserInfoByUserId(Integer userId)  throws ExecutionException, InterruptedException;
 
     boolean registerUser(UserModel userModel);
+
+    Boolean login(String telephone, String password);
 }

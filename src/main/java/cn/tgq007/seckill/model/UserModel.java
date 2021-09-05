@@ -22,6 +22,7 @@ public class UserModel {
     @NotEmpty(message = "验证码不能为空")
     private String otpCode;
 
+
     public Integer getId() {
         return id;
     }

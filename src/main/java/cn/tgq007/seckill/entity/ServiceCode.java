@@ -7,7 +7,9 @@ public enum ServiceCode implements ResultCode {
     FAIL(-1, "失败"),
     BAD_REQUEST(400, "bad request"),
     PARAM_ERROR(300, "参数异常"),
-    SERVER_ERROR(500, "服务异常")
+    SERVER_ERROR(500, "服务异常"),
+    USER_NOT_EXIST(20001, "用户不存在"),
+    USER_LOGIN_FAILED(20002, "手机或密码错误")
     ;
 
     int code;

@@ -1,5 +1,6 @@
 package cn.tgq007.seckill.controller;
 
+import cn.tgq007.seckill.dto.LoginDTO;
 import cn.tgq007.seckill.dto.TelephoneDTO;
 import cn.tgq007.seckill.entity.ResponseData;
 import cn.tgq007.seckill.model.UserModel;
@@ -26,9 +27,6 @@ public class UserInfoController {
     @Autowired
     private UserInfoService userInfoService;
 
-    @Autowired
-    private HttpServletRequest httpServletRequest;
-
     @PostMapping("/getOTP")
     public ResponseData<Boolean> getUserOTP(@Valid @RequestBody TelephoneDTO telephoneDTO) {
         boolean res = userInfoService.getUserOTP(telephoneDTO.getTelephone());
@@ -45,5 +43,11 @@ public class UserInfoController {
     public ResponseData<Boolean> registerUser(@Valid @RequestBody UserModel userModel) {
         boolean status = userInfoService.registerUser(userModel);
         return ResponseData.success(status);
+    }
+
+    @PostMapping("/login")
+    public ResponseData<Boolean> login(@Valid @RequestBody LoginDTO loginDTO) {
+        boolean flag = userInfoService.login(loginDTO.getTelephone(), loginDTO.getPassword());
+        return ResponseData.success(flag);
     }
 }
